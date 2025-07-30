@@ -99,3 +99,22 @@ echo "You can now run:"
 echo "  pm2 logs fivem       # to view logs"
 echo "  pm2 restart fivem    # to restart server"
 echo "  nano ${FIVEM_DATA}/server.cfg  # to edit config"
+
+# Get public IP address
+SERVER_IP=$(curl -s http://checkip.amazonaws.com || hostname -I | awk '{print $1}')
+FIVEM_URL="http://${SERVER_IP}:40120"
+
+echo ""
+echo "🌐 Your FiveM server web interface may be available at:"
+echo "👉 ${FIVEM_URL}"
+echo ""
+
+# Try to open it if GUI browser available
+if command -v xdg-open &>/dev/null; then
+  xdg-open "${FIVEM_URL}" &>/dev/null &
+elif command -v gnome-open &>/dev/null; then
+  gnome-open "${FIVEM_URL}" &>/dev/null &
+elif command -v open &>/dev/null; then
+  open "${FIVEM_URL}" &>/dev/null &
+fi
+
