@@ -10,6 +10,26 @@ prompt() {
   eval "$var_name=\"\${input:-$default_val}\""
 }
 
+RESTORE='\033[0m'
+RED='\033[00;31m'
+GREEN='\033[00;32m'
+YELLOW='\033[00;33m'
+BLUE='\033[00;34m'
+PURPLE='\033[00;35m'
+CYAN='\033[00;36m'
+LIGHTGRAY='\033[00;37m'
+LRED='\033[01;31m'
+LGREEN='\033[01;32m'
+LYELLOW='\033[01;33m'
+LBLUE='\033[01;34m'
+LPURPLE='\033[01;35m'
+LCYAN='\033[01;36m'
+WHITE='\033[01;37m'
+ 
+echo "=======================">>setup.log 2>>error.log
+date >>setup.log 2>>error.log
+echo "=======================">>setup.log 2>>error.log
+
 echo "==== FiveM Auto-Install Script for Debian 12 / Ubuntu 22.04 ===="
 echo "Press ENTER to accept defaults or type to override."
 
@@ -25,23 +45,23 @@ prompt HOSTNAME "Server hostname" "Zed Hosting FXServer"
 prompt MAXCLIENTS "Max player count" "10"
 
 echo "Installing dependencies..."
-apt update && apt install -y curl wget jq npm nano git git-lfs mariadb-server
+apt update && apt install -y curl wget jq npm nano git git-lfs mariadb-server >>setup.log 2>>error.log
 
 echo "Creating system user '$FIVEM_USER'..."
-id -u "$FIVEM_USER" &>/dev/null || adduser --disabled-password --gecos "" "$FIVEM_USER"
+id -u "$FIVEM_USER" &>/dev/null || adduser --disabled-password --gecos "" "$FIVEM_USER" >>setup.log 2>>error.log
 
 echo "Creating directories..."
-mkdir -p "$FIVEM_BASE" "$FIVEM_DATA"
-chown -R "$FIVEM_USER:$FIVEM_USER" "$(dirname "$FIVEM_BASE")"
+mkdir -p "$FIVEM_BASE" "$FIVEM_DATA" >>setup.log 2>>error.log
+chown -R "$FIVEM_USER:$FIVEM_USER" "$(dirname "$FIVEM_BASE")" >>setup.log 2>>error.log
 
 echo "Installing FXServer..."
 cd "$FIVEM_BASE"
-sudo -u "$FIVEM_USER" wget -q https://zedhosting.gg/downloads/fivem_install.sh
-sudo -u "$FIVEM_USER" bash fivem_install.sh
+sudo -u "$FIVEM_USER" wget -q https://zedhosting.gg/downloads/fivem_install.sh >>setup.log 2>>error.log
+sudo -u "$FIVEM_USER" bash fivem_install.sh >>setup.log 2>>error.log
 
 echo "Cloning cfx-server-data..."
 cd "$FIVEM_DATA"
-sudo -u "$FIVEM_USER" git clone https://github.com/citizenfx/cfx-server-data .
+sudo -u "$FIVEM_USER" git clone https://github.com/citizenfx/cfx-server-data . >>setup.log 2>>error.log
 
 echo "Creating server.cfg..."
 sudo -u "$FIVEM_USER" tee "$FIVEM_DATA/server.cfg" > /dev/null <<EOF
@@ -82,17 +102,17 @@ FLUSH PRIVILEGES;
 MYSQL
 
 echo "Installing PM2..."
-npm install -g pm2
+npm install -g pm2 >>setup.log 2>>error.log
 
 echo "Fetching run/start scripts..."
 cd "$FIVEM_BASE"
-sudo -u "$FIVEM_USER" wget -q https://zedhosting.gg/downloads/fivem_start.sh
-sudo -u "$FIVEM_USER" wget -q https://zedhosting.gg/downloads/run.sh
+sudo -u "$FIVEM_USER" wget -q https://zedhosting.gg/downloads/fivem_start.sh >>setup.log 2>>error.log
+sudo -u "$FIVEM_USER" wget -q https://zedhosting.gg/downloads/run.sh >>setup.log 2>>error.log
 
 echo "Launching server with PM2..."
-sudo -u "$FIVEM_USER" pm2 start fivem_start.sh --name fivem
-sudo -u "$FIVEM_USER" pm2 startup
-sudo -u "$FIVEM_USER" pm2 save
+sudo -u "$FIVEM_USER" pm2 start fivem_start.sh --name fivem >>setup.log 2>>error.log
+sudo env PATH=$PATH:/usr/bin /usr/local/lib/node_modules/pm2/bin/pm2 startup systemd -u "$FIVEM_USER" --hp /home/fivem >>setup.log 2>>error.log
+sudo -u "$FIVEM_USER" pm2 save >>setup.log 2>>error.log
 
 echo "✅ Installation complete!"
 echo "You can now run:"
