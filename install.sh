@@ -92,6 +92,15 @@ set steam_webApiKey ""
 sv_licenseKey "${LICENSE_KEY}"
 EOF
 
+sudo -u "$FIVEM_USER" tee "$FIVEM_BASE/txData/default/config.json" > /dev/null <<EOF
+{
+  "version": 2,
+  "server": {
+    "dataPath": "/home/fivem/fx-server-data/"
+  }
+}
+EOF
+
 echo -e "${LBLUE}Configuring MariaDB...${RESTORE}"
 systemctl enable --now mariadb
 mysql -uroot <<MYSQL
