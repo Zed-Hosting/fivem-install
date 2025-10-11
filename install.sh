@@ -92,7 +92,7 @@ sudo -u "$FIVEM_USER" wget -q https://zedhosting.gg/downloads/run.sh
 echo "Launching server with PM2..."
 sudo -u "$FIVEM_USER" pm2 start fivem_start.sh --name fivem
 sudo -u "$FIVEM_USER" pm2 startup
-pm2 save
+sudo -u "$FIVEM_USER" pm2 save
 
 echo "✅ Installation complete!"
 echo "You can now run:"
