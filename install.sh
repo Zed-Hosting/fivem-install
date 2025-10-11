@@ -30,8 +30,8 @@ echo -e "${YELLOW}=======================${RESTORE}">>setup.log 2>>error.log
 date >>setup.log 2>>error.log
 echo -e "${YELLOW}=======================${RESTORE}">>setup.log 2>>error.log
 
-echo -e "${PURPLE}==== FiveM Auto-Install Script for Debian 12 / Ubuntu 22.04 ====${RESTORE}"
-echo -e "${PURPLE}Press ENTER to accept defaults or type to override${RESTORE}"
+echo -e "${LCYAN}==== FiveM Auto-Install Script for Debian 12 / Ubuntu 22.04 ====${RESTORE}"
+echo -e "${LCYAN}Press ENTER to accept defaults or type to override${RESTORE}"
 
 # --- Collect user input ---
 prompt FIVEM_USER "Enter system username to run FiveM (optional)" "fivem"
