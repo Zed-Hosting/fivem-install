@@ -61,7 +61,7 @@ sudo -u "$FIVEM_USER" bash fivem_install.sh >>setup.log 2>>error.log
 
 echo "Cloning cfx-server-data..."
 cd "$FIVEM_DATA"
-sudo -u "$FIVEM_USER" git clone https://github.com/citizenfx/cfx-server-data . >>setup.log 2>>error.log
+sudo -u "$FIVEM_USER" git clone https://github.com/citizenfx/cfx-server-data .
 
 echo "Creating server.cfg..."
 sudo -u "$FIVEM_USER" tee "$FIVEM_DATA/server.cfg" > /dev/null <<EOF
