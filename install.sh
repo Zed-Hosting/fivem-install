@@ -45,7 +45,7 @@ prompt HOSTNAME "Server hostname (optional)" "Zed Hosting FXServer"
 prompt MAXCLIENTS "Max player count (optional)" "10"
 
 echo "Installing dependencies..."
-apt update && apt install -y curl wget jq npm nano git git-lfs mariadb-server >>setup.log 2>>error.log
+apt update >>setup.log 2>>error.log && apt install -y curl wget jq npm nano git git-lfs mariadb-server >>setup.log 2>>error.log
 
 echo "Creating system user '$FIVEM_USER'..."
 id -u "$FIVEM_USER" &>/dev/null || adduser --disabled-password --gecos "" "$FIVEM_USER" >>setup.log 2>>error.log
