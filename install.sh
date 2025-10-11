@@ -113,7 +113,7 @@ echo -e "${LBLUE}Launching server with PM2...${RESTORE}"
 sudo -u "$FIVEM_USER" pm2 start fivem_start.sh --name fivem >>setup.log 2>>error.log
 sudo env PATH=$PATH:/usr/bin /usr/local/lib/node_modules/pm2/bin/pm2 startup systemd -u "$FIVEM_USER" --hp /home/fivem >>setup.log 2>>error.log
 sudo -u "$FIVEM_USER" pm2 save >>setup.log 2>>error.log
-sudo -u "$FIVEM_USER" pm2 logs fivem --nostream
+sudo -u "$FIVEM_USER" pm2 logs fivem --nostream --out --lines 20
 
 echo ""
 echo -e "✅ ${GREEN}Installation complete!${RESTORE}"
@@ -129,7 +129,9 @@ FIVEM_URL="http://${SERVER_IP}:40120"
 
 echo ""
 echo -e "${WHITE}🌐 Your FiveM server web interface may be available at:${RESTORE}"
+echo ""
 echo -e "${GREEN}👉 ${FIVEM_URL} ${RESTORE}"
+echo ""
 echo -e "${WHITE}🔢 The PIN is listed above${RESTORE}"
 
 # Try to open it if GUI browser available
