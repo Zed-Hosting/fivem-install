@@ -26,12 +26,12 @@ LPURPLE='\033[01;35m'
 LCYAN='\033[01;36m'
 WHITE='\033[01;37m'
  
-echo "=======================">>setup.log 2>>error.log
+echo -e "${YELLOW}=======================${RESTORE}">>setup.log 2>>error.log
 date >>setup.log 2>>error.log
-echo "=======================">>setup.log 2>>error.log
+echo -e "${YELLOW}=======================${RESTORE}">>setup.log 2>>error.log
 
-echo "==== FiveM Auto-Install Script for Debian 12 / Ubuntu 22.04 ===="
-echo "Press ENTER to accept defaults or type to override."
+echo -e "${PURPLE}==== FiveM Auto-Install Script for Debian 12 / Ubuntu 22.04 ====${RESTORE}"
+echo -e "${PURPLE}Press ENTER to accept defaults or type to override${RESTORE}"
 
 # --- Collect user input ---
 prompt FIVEM_USER "Enter system username to run FiveM (optional)" "fivem"
@@ -44,26 +44,26 @@ prompt DB_NAME "MariaDB database name (optional)" "fivem_db"
 prompt HOSTNAME "Server hostname (optional)" "Zed Hosting FXServer"
 prompt MAXCLIENTS "Max player count (optional)" "10"
 
-echo "Installing dependencies..."
+echo -e "${LBLUE}Installing dependencies...${RESTORE}"
 apt update >>setup.log 2>>error.log && apt install -y curl wget jq npm nano git git-lfs mariadb-server >>setup.log 2>>error.log
 
-echo "Creating system user '$FIVEM_USER'..."
+echo -e "${LBLUE}Creating system user '$FIVEM_USER'...${RESTORE}"
 id -u "$FIVEM_USER" &>/dev/null || adduser --disabled-password --gecos "" "$FIVEM_USER" >>setup.log 2>>error.log
 
-echo "Creating directories..."
+echo -e "${LBLUE}Creating directories...${RESTORE}"
 mkdir -p "$FIVEM_BASE" "$FIVEM_DATA" >>setup.log 2>>error.log
 chown -R "$FIVEM_USER:$FIVEM_USER" "$(dirname "$FIVEM_BASE")" >>setup.log 2>>error.log
 
-echo "Installing FXServer..."
+echo -e "${LBLUE}Installing FXServer...${RESTORE}"
 cd "$FIVEM_BASE"
 sudo -u "$FIVEM_USER" wget -q https://zedhosting.gg/downloads/fivem_install.sh >>setup.log 2>>error.log
 sudo -u "$FIVEM_USER" bash fivem_install.sh >>setup.log 2>>error.log
 
-echo "Cloning cfx-server-data..."
+echo -e "${LBLUE}Cloning cfx-server-data...${RESTORE}"
 cd "$FIVEM_DATA"
 sudo -u "$FIVEM_USER" git clone https://github.com/citizenfx/cfx-server-data .
 
-echo "Creating server.cfg..."
+echo -e "${LBLUE}Creating server.cfg...${RESTORE}"
 sudo -u "$FIVEM_USER" tee "$FIVEM_DATA/server.cfg" > /dev/null <<EOF
 endpoint_add_tcp "0.0.0.0:30120"
 endpoint_add_udp "0.0.0.0:30120"
@@ -92,7 +92,7 @@ set steam_webApiKey ""
 sv_licenseKey "${LICENSE_KEY}"
 EOF
 
-echo "Configuring MariaDB..."
+echo -e "${LBLUE}Configuring MariaDB...${RESTORE}"
 systemctl enable --now mariadb
 mysql -uroot <<MYSQL
 CREATE USER IF NOT EXISTS '${DB_USER}'@'127.0.0.1' IDENTIFIED BY '${DB_PASS}';
@@ -101,34 +101,35 @@ GRANT ALL PRIVILEGES ON ${DB_NAME}.* TO '${DB_USER}'@'127.0.0.1';
 FLUSH PRIVILEGES;
 MYSQL
 
-echo "Installing PM2..."
+echo -e "${LBLUE}Installing PM2...${RESTORE}"
 npm install -g pm2 >>setup.log 2>>error.log
 
-echo "Fetching run/start scripts..."
+echo -e "${LBLUE}Fetching run/start scripts...${RESTORE}"
 cd "$FIVEM_BASE"
 sudo -u "$FIVEM_USER" wget -q https://zedhosting.gg/downloads/fivem_start.sh >>setup.log 2>>error.log
 sudo -u "$FIVEM_USER" wget -q https://zedhosting.gg/downloads/run.sh >>setup.log 2>>error.log
 
-echo "Launching server with PM2..."
+echo -e "${LBLUE}Launching server with PM2...${RESTORE}"
 sudo -u "$FIVEM_USER" pm2 start fivem_start.sh --name fivem >>setup.log 2>>error.log
 sudo env PATH=$PATH:/usr/bin /usr/local/lib/node_modules/pm2/bin/pm2 startup systemd -u "$FIVEM_USER" --hp /home/fivem >>setup.log 2>>error.log
 sudo -u "$FIVEM_USER" pm2 save >>setup.log 2>>error.log
 
-echo "✅ Installation complete!"
-echo "You can now run:"
-echo " sudo -u "$FIVEM_USER" pm2 logs fivem       # to view logs"
-echo " sudo -u "$FIVEM_USER" pm2 restart fivem    # to restart server"
-echo " sudo -u "$FIVEM_USER" nano ${FIVEM_DATA}/server.cfg  # to edit config"
+echo -e "✅ ${GREEN}Installation complete!${RESTORE}"
+echo -e "${LBLUE}You can now run:"
+echo -e "${LBLUE} sudo -u "$FIVEM_USER" pm2 logs fivem       # to view logs"
+echo -e "${LBLUE} sudo -u "$FIVEM_USER" pm2 restart fivem    # to restart server"
+echo -e "${LBLUE} sudo -u "$FIVEM_USER" nano ${FIVEM_DATA}/server.cfg  # to edit config"
 
-echo "sudo -u "$FIVEM_USER" pm2 logs fivem --nostream"
+sudo -u "$FIVEM_USER" pm2 logs fivem --nostream
+
 # Get public IP address
 SERVER_IP=$(curl -s http://checkip.amazonaws.com || hostname -I | awk '{print $1}')
 FIVEM_URL="http://${SERVER_IP}:40120"
 
 echo ""
-echo "🌐 Your FiveM server web interface may be available at:"
-echo "👉 ${FIVEM_URL}"
-echo "The PIN is listed above"
+echo -e "${LBLUE}🌐 Your FiveM server web interface may be available at:${RESTORE}"
+echo -e "${LBLUE}👉 ${FIVEM_URL} ${RESTORE}"
+echo -e "${LBLUE}The PIN is listed above${RESTORE}"
 
 # Try to open it if GUI browser available
 if command -v xdg-open &>/dev/null; then
