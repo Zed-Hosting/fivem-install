@@ -113,23 +113,24 @@ echo -e "${LBLUE}Launching server with PM2...${RESTORE}"
 sudo -u "$FIVEM_USER" pm2 start fivem_start.sh --name fivem >>setup.log 2>>error.log
 sudo env PATH=$PATH:/usr/bin /usr/local/lib/node_modules/pm2/bin/pm2 startup systemd -u "$FIVEM_USER" --hp /home/fivem >>setup.log 2>>error.log
 sudo -u "$FIVEM_USER" pm2 save >>setup.log 2>>error.log
-
-echo -e "✅ ${GREEN}Installation complete!${RESTORE}"
-echo -e "${LBLUE}You can now run:"
-echo -e "${LBLUE} sudo -u "$FIVEM_USER" pm2 logs fivem       # to view logs"
-echo -e "${LBLUE} sudo -u "$FIVEM_USER" pm2 restart fivem    # to restart server"
-echo -e "${LBLUE} sudo -u "$FIVEM_USER" nano ${FIVEM_DATA}/server.cfg  # to edit config"
-
 sudo -u "$FIVEM_USER" pm2 logs fivem --nostream
+
+echo ""
+echo -e "✅ ${GREEN}Installation complete!${RESTORE}"
+echo ""
+echo -e "${WHITE}You can now run:"
+echo -e "${WHITE} sudo -u "$FIVEM_USER" pm2 logs fivem       # to view logs"
+echo -e "${WHITE} sudo -u "$FIVEM_USER" pm2 restart fivem    # to restart server"
+echo -e "${WHITE} sudo -u "$FIVEM_USER" nano ${FIVEM_DATA}/server.cfg  # to edit config"
 
 # Get public IP address
 SERVER_IP=$(curl -s http://checkip.amazonaws.com || hostname -I | awk '{print $1}')
 FIVEM_URL="http://${SERVER_IP}:40120"
 
 echo ""
-echo -e "${LBLUE}🌐 Your FiveM server web interface may be available at:${RESTORE}"
-echo -e "${LBLUE}👉 ${FIVEM_URL} ${RESTORE}"
-echo -e "${LBLUE}The PIN is listed above${RESTORE}"
+echo -e "${WHITE}🌐 Your FiveM server web interface may be available at:${RESTORE}"
+echo -e "${GREEN}👉 ${FIVEM_URL} ${RESTORE}"
+echo -e "${WHITE}🔢 The PIN is listed above${RESTORE}"
 
 # Try to open it if GUI browser available
 if command -v xdg-open &>/dev/null; then
