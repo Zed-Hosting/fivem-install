@@ -242,17 +242,17 @@ echo -e "${WHITE} sudo -u "$FIVEM_USER" nano ${FIVEM_DATA}/server.cfg  # to edit
 # Get public IP address
 SERVER_IP=$(curl -s http://checkip.amazonaws.com || hostname -I | awk '{print $1}')
 FIVEM_URL="http://${SERVER_IP}:40120"
-sleep 10
+echo ""
 echo -e "${WHITE}Generating URL...${RESTORE}"
-
+sleep 10
 echo ""
 echo -e "${WHITE}🌐 Your FiveM server web interface may be available at:${RESTORE}"
 echo ""
 echo -e "${GREEN}👉 ${FIVEM_URL} ${RESTORE}"
 echo ""
-sleep 10
 echo -e "${WHITE}Generating PIN...${RESTORE}"
 PIN_CODE=""
+sleep 10
 PIN_CODE=$(sudo -u fivem tail -n 500 /home/fivem/.pm2/logs/fivem-out.log   | strings   | grep "Use this PIN to add a new master account:"   | tail -n 1   | grep -oE '[0-9]{4}')
 echo -e "${WHITE}🔢 The PIN is: ${CYAN}${PIN_CODE}${RESTORE}"
 echo ""
