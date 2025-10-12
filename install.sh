@@ -74,6 +74,7 @@ if [ -d "$FIVEM_DATA" ]; then
     read -p "Installation found. Do you want to remove it? (y/n): " choice
     case "$choice" in
         y|Y )
+            echo ""
             echo "========================="
             echo -e "${LRED}Removing Old Installation...${RESTORE}"
             rm -rf "$FIVEM_DATA"
