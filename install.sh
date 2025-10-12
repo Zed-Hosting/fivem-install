@@ -1,7 +1,7 @@
   #!/usr/bin/env bash
 set -euo pipefail
 
-VERSION="3.2.7"
+VERSION="3.2.8"
 
 # --- Prompt with default helper ---
 prompt() {
@@ -244,7 +244,6 @@ SERVER_IP=$(curl -s http://checkip.amazonaws.com || hostname -I | awk '{print $1
 FIVEM_URL="http://${SERVER_IP}:40120"
 echo ""
 echo -e "${GREEN}Generating URL...${RESTORE}"
-sleep 10
 echo ""
 echo -e "${WHITE}🌐 Your FiveM server web interface may be available at:${RESTORE}"
 echo ""
@@ -253,8 +252,13 @@ echo ""
 echo -e "${GREEN}Generating PIN...${RESTORE}"
 echo ""
 PIN_CODE=""
-sleep 15
-PIN_CODE=$(sudo -u fivem tail -n 500 /home/fivem/.pm2/logs/fivem-out.log   | strings   | grep "Use this PIN to add a new master account:"   | tail -n 1   | grep -oE '[0-9]{4}')
+while [ -z "$PIN_CODE" ]; do
+    PIN_CODE=$(sudo -u fivem tail -n 500 /home/fivem/.pm2/logs/fivem-out.log   | strings   | grep "Use this PIN to add a new master account:"   | tail -n 1   | grep -oE '[0-9]{4}')
+    if [ -z "$PIN_CODE" ]; then
+        PIN_CODE=$(sudo -u fivem tail -n 500 /home/fivem/.pm2/logs/fivem-out.log   | strings   | grep "Use this PIN to add a new master account:"   | tail -n 1   | grep -oE '[0-9]{4}')
+    fi
+done
+#PIN_CODE=$(sudo -u fivem tail -n 500 /home/fivem/.pm2/logs/fivem-out.log   | strings   | grep "Use this PIN to add a new master account:"   | tail -n 1   | grep -oE '[0-9]{4}')
 echo -e "${WHITE}🔢 The PIN is: ${CYAN}${PIN_CODE}${RESTORE}"
 echo ""
 
