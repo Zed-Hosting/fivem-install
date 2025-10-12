@@ -114,7 +114,7 @@ sudo -u "$FIVEM_USER" pm2 start fivem_start.sh --name fivem >>setup.log 2>>error
 sudo env PATH=$PATH:/usr/bin /usr/local/lib/node_modules/pm2/bin/pm2 startup systemd -u "$FIVEM_USER" --hp /home/fivem >>setup.log 2>>error.log
 sudo -u "$FIVEM_USER" pm2 save >>setup.log 2>>error.log
 
-sudo -u "$FIVEM_USER" mkdir -p "$FIVEM_BASE/txData/default/
+sudo -u "$FIVEM_USER" mkdir -p "$FIVEM_BASE/txData/default/"
 sudo -u "$FIVEM_USER" tee "$FIVEM_BASE/txData/default/config.json" > /dev/null <<EOF
 {
   "version": 2,
