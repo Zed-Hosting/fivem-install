@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+VERSION="3.0.4"
+
 # --- Prompt with default helper ---
 prompt() {
   local var_name=$1
@@ -32,8 +34,8 @@ RESET=$'\e[0m'
 echo -e "${YELLOW}=======================${RESTORE}">>setup.log 2>>error.log
 date >>setup.log 2>>error.log
 echo -e "${YELLOW}=======================${RESTORE}">>setup.log 2>>error.log
-
-echo -e "${LCYAN}==== FiveM Auto-Install Script for Debian 12 / Ubuntu 22.04 ====${RESTORE}"
+echo ""
+echo -e "${LCYAN}==== FiveM Auto-Install Script for Debian 12 / Ubuntu 22.04 v${VERSION}====${RESTORE}"
 echo -e "${LCYAN}Press ENTER to accept defaults or type to override${RESTORE}"
 
 # --- Collect user input ---
