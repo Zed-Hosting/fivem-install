@@ -44,9 +44,10 @@ prompt FIVEM_DATA "FXServer data directory (optional)" "/home/${FIVEM_USER}/fx-s
 #prompt LICENSE_KEY "${RED}Enter your FiveM license key (REQUIRED)${RESTORE}" "changeme"
 echo -e "${RESTORE}"
 
+echo -e "${LRED}"
 LICENSE_KEY=""
 while [ -z "$LICENSE_KEY" ]; do
-    read -p "${WARN}Enter your FiveM license key (REQUIRED)${RESET}: " LICENSE_KEY
+    read -p "Enter your FiveM license key (REQUIRED)${RESET}: " LICENSE_KEY
     if [ -z "$LICENSE_KEY" ]; then
         echo -e "${YELLOW}License key cannot be empty. Please try again.${RESTORE}"
     fi
@@ -69,11 +70,13 @@ if [ -d "$FIVEM_DATA" ]; then
     read -p "Installation found. Do you want to remove it? (y/n): " choice
     case "$choice" in
         y|Y )
-            echo -e "${LRED}Removing directory '$FIVEM_DATA'...${RESTORE}"
+            echo -e "${LRED}Removing Old Installation...${RESTORE}"
             rm -rf "$FIVEM_DATA"
-            echo -e "${LYELLOW}Directory removed.${RESTORE}"
-            sudo -u ${FIVEM_USER} pm2 delete fivem
-            echo -e "${LBLUE}Creating directories...${RESTORE}"
+            rm -rf "$FIVEM_BASE"
+            echo -e "${LYELLOW}Directories Removed${RESTORE}"
+            sudo -u ${FIVEM_USER} pm2 delete fivem >>setup.log 2>>error.log
+            echo -e "${LYELLOW}Old Deployment Removed${RESTORE}"
+            echo -e "${LBLUE}Creating New Directories...${RESTORE}"
             mkdir -p "$FIVEM_BASE" "$FIVEM_DATA" >>setup.log 2>>error.log
             chown -R "$FIVEM_USER:$FIVEM_USER" "$(dirname "$FIVEM_BASE")" >>setup.log 2>>error.log
             ;;
@@ -87,7 +90,7 @@ if [ -d "$FIVEM_DATA" ]; then
             ;;
     esac
 else
-    echo -e "${WHITE}Directory '$FIVEM_DATA' does not exist.${RESTORE}"
+    #echo -e "${WHITE}Directory '$FIVEM_DATA' does not exist.${RESTORE}"
     echo -e "${LBLUE}Creating directories...${RESTORE}"
     mkdir -p "$FIVEM_BASE" "$FIVEM_DATA" >>setup.log 2>>error.log
     chown -R "$FIVEM_USER:$FIVEM_USER" "$(dirname "$FIVEM_BASE")" >>setup.log 2>>error.log
