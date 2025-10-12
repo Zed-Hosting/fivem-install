@@ -85,6 +85,9 @@ if [ -d "$FIVEM_DATA" ]; then
     esac
 else
     echo -e "${WHITE}Directory '$FIVEM_DATA' does not exist.${RESTORE}"
+    echo -e "${LBLUE}Creating directories...${RESTORE}"
+    mkdir -p "$FIVEM_BASE" "$FIVEM_DATA" >>setup.log 2>>error.log
+    chown -R "$FIVEM_USER:$FIVEM_USER" "$(dirname "$FIVEM_BASE")" >>setup.log 2>>error.log
 fi
 
 echo -e "${LBLUE}Installing FXServer...${RESTORE}"
