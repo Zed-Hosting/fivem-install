@@ -36,7 +36,8 @@ date >>setup.log 2>>error.log
 echo -e "${YELLOW}=======================${RESTORE}">>setup.log 2>>error.log
 echo ""
 echo -e "${LCYAN}==== FiveM Auto-Install Script for Debian 12 / Ubuntu 22.04 v${VERSION}====${RESTORE}"
-echo -e "${LCYAN}Press ENTER to accept defaults or type to override${RESTORE}"
+echo ""
+echo -e "${LCYAN}==== Press ENTER to accept defaults or type to override ====${RESTORE}"
 
 # --- Collect user input ---
 echo -e "${WHITE}"
@@ -69,15 +70,19 @@ id -u "$FIVEM_USER" &>/dev/null || adduser --disabled-password --gecos "" "$FIVE
 
 # Check if the directory exists
 if [ -d "$FIVEM_DATA" ]; then
+    echo ""
     read -p "Installation found. Do you want to remove it? (y/n): " choice
     case "$choice" in
         y|Y )
+            echo "========================="
             echo -e "${LRED}Removing Old Installation...${RESTORE}"
             rm -rf "$FIVEM_DATA"
             rm -rf "$FIVEM_BASE"
             echo -e "${LYELLOW}Directories Removed${RESTORE}"
             sudo -u ${FIVEM_USER} pm2 delete fivem >>setup.log 2>>error.log
             echo -e "${LYELLOW}Old Deployment Removed${RESTORE}"
+            echo "========================="
+            echo ""
             echo -e "${LBLUE}Creating New Directories...${RESTORE}"
             mkdir -p "$FIVEM_BASE" "$FIVEM_DATA" >>setup.log 2>>error.log
             chown -R "$FIVEM_USER:$FIVEM_USER" "$(dirname "$FIVEM_BASE")" >>setup.log 2>>error.log
@@ -93,7 +98,7 @@ if [ -d "$FIVEM_DATA" ]; then
     esac
 else
     #echo -e "${WHITE}Directory '$FIVEM_DATA' does not exist.${RESTORE}"
-    echo -e "${LBLUE}Creating directories...${RESTORE}"
+    echo -e "${LBLUE}Creating Directories...${RESTORE}"
     mkdir -p "$FIVEM_BASE" "$FIVEM_DATA" >>setup.log 2>>error.log
     chown -R "$FIVEM_USER:$FIVEM_USER" "$(dirname "$FIVEM_BASE")" >>setup.log 2>>error.log
 fi
@@ -103,11 +108,11 @@ cd "$FIVEM_BASE"
 sudo -u "$FIVEM_USER" wget -q https://zedhosting.gg/downloads/fivem_install.sh >>setup.log 2>>error.log
 sudo -u "$FIVEM_USER" bash fivem_install.sh >>setup.log 2>>error.log
 
-echo -e "${LBLUE}Cloning cfx-server-data...${RESTORE}"
+echo -e "${LBLUE}Cloning cfx-server-data GitHub Repo...${RESTORE}"
 cd "$FIVEM_DATA"
 sudo -u "$FIVEM_USER" git clone --quiet https://github.com/citizenfx/cfx-server-data . 
 
-echo -e "${LBLUE}Creating server.cfg...${RESTORE}"
+echo -e "${LBLUE}Populating server.cfg with default values...${RESTORE}"
 sudo -u "$FIVEM_USER" tee "$FIVEM_DATA/server.cfg" > /dev/null <<EOF
 endpoint_add_tcp "0.0.0.0:30120"
 endpoint_add_udp "0.0.0.0:30120"
@@ -186,8 +191,8 @@ echo -e "${LBLUE}Fetching run/start scripts...${RESTORE}"
 cd "$FIVEM_BASE"
 sudo -u "$FIVEM_USER" wget -q https://zedhosting.gg/downloads/fivem_start.sh >>setup.log 2>>error.log
 sudo -u "$FIVEM_USER" wget -q https://zedhosting.gg/downloads/run.sh >>setup.log 2>>error.log
-
-echo -e "${LBLUE}Launching server with PM2...${RESTORE}"
+echo ""
+echo -e "${LBLUE}🚀 Launching Server...${RESTORE}"
 sudo -u "$FIVEM_USER" pm2 start fivem_start.sh --name fivem >>setup.log 2>>error.log
 sudo env PATH=$PATH:/usr/bin /usr/local/lib/node_modules/pm2/bin/pm2 startup systemd -u "$FIVEM_USER" --hp /home/fivem >>setup.log 2>>error.log
 sudo -u "$FIVEM_USER" pm2 save >>setup.log 2>>error.log
@@ -249,6 +254,7 @@ echo ""
 echo -e "${GREEN}👉 ${FIVEM_URL} ${RESTORE}"
 echo ""
 echo -e "${WHITE}🔢 The PIN is: ${CYAN}${PIN_CODE}${RESTORE}"
+echo ""
 
 # Try to open it if GUI browser available
 if command -v xdg-open &>/dev/null; then
