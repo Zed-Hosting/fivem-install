@@ -223,11 +223,11 @@ sleep 10
 #sudo -u "$FIVEM_USER" pm2 restart fivem >>setup.log 2>>error.log
 #sudo -u "$FIVEM_USER" pm2 logs fivem --nostream --out --lines 30
 
-PIN_CODE=sudo -u fivem tail -n 500 /home/fivem/.pm2/logs/fivem-out.log \
+PIN_CODE=$(sudo -u fivem tail -n 500 /home/fivem/.pm2/logs/fivem-out.log \
   | strings \
   | grep "Use this PIN to add a new master account:" \
   | tail -n 1 \
-  | grep -oE '[0-9]{4}'
+  | grep -oE '[0-9]{4}')
 
 echo ""
 echo -e "✅ ${GREEN}Installation complete!${RESTORE}"
