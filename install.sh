@@ -253,7 +253,7 @@ echo ""
 echo -e "${GREEN}Generating PIN...${RESTORE}"
 echo ""
 PIN_CODE=""
-sleep 10
+sleep 15
 PIN_CODE=$(sudo -u fivem tail -n 500 /home/fivem/.pm2/logs/fivem-out.log   | strings   | grep "Use this PIN to add a new master account:"   | tail -n 1   | grep -oE '[0-9]{4}')
 echo -e "${WHITE}🔢 The PIN is: ${CYAN}${PIN_CODE}${RESTORE}"
 echo ""
