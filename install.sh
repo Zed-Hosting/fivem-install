@@ -37,7 +37,14 @@ echo -e "${LCYAN}Press ENTER to accept defaults or type to override${RESTORE}"
 prompt FIVEM_USER "Enter system username to run FiveM (optional)" "fivem"
 prompt FIVEM_BASE "FXServer install directory (optional)" "/home/${FIVEM_USER}/fx-server"
 prompt FIVEM_DATA "FXServer data directory (optional)" "/home/${FIVEM_USER}/fx-server-data"
-prompt LICENSE_KEY "Enter your FiveM license key (REQUIRED)" "changeme"
+#prompt LICENSE_KEY "${RED}Enter your FiveM license key (REQUIRED)${RESTORE}" "changeme"
+LICENSE_KEY=""
+while [ -z "$LICENSE_KEY" ]; do
+    read -p "${RED}Enter your FiveM license key (REQUIRED)${RESTORE} " LICENSE_KEY
+    if [ -z "$LICENSE_KEY" ]; then
+        echo "License key cannot be empty. Please try again."
+    fi
+done
 prompt DB_USER "MariaDB username (optional)" "fivem"
 prompt DB_PASS "MariaDB password (optional)" "fivem123"
 prompt DB_NAME "MariaDB database name (optional)" "fivem_db"
@@ -124,6 +131,7 @@ sudo -u "$FIVEM_USER" pm2 start fivem_start.sh --name fivem >>setup.log 2>>error
 sudo env PATH=$PATH:/usr/bin /usr/local/lib/node_modules/pm2/bin/pm2 startup systemd -u "$FIVEM_USER" --hp /home/fivem >>setup.log 2>>error.log
 sudo -u "$FIVEM_USER" pm2 save >>setup.log 2>>error.log
 
+sleep 10
 #sudo -u "$FIVEM_USER" pm2 restart fivem >>setup.log 2>>error.log
 sudo -u "$FIVEM_USER" pm2 logs fivem --nostream --out --lines 30
 
