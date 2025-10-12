@@ -80,14 +80,6 @@ sudo -u "$FIVEM_USER" tee "$FIVEM_DATA/server.cfg" > /dev/null <<EOF
 endpoint_add_tcp "0.0.0.0:30120"
 endpoint_add_udp "0.0.0.0:30120"
 
-ensure mapmanager
-ensure chat
-ensure spawnmanager
-ensure sessionmanager
-ensure basic-gamemode
-ensure hardcap
-ensure rconlog
-
 sv_scriptHookAllowed 0
 sets tags "default"
 sets locale "en-US"
@@ -96,12 +88,54 @@ sv_hostname "${HOSTNAME}"
 sets sv_projectName "${HOSTNAME}"
 sets sv_projectDesc "FXServer setup via script"
 
+#Database Info
+#set mysql_debug true
+#set mysql_ui true
+set mysql_slow_query_warning 1200
+set mysql_connection_string "mysql://${DB_USER}:${DB_PASS}@localhost:3306/${DB_NAME}?waitForConnections=true&charset=utf8mb4"
+
 set temp_convar "ZED"
 set onesync on
 sv_maxclients ${MAXCLIENTS}
 
+# Loading a server icon (96x96 PNG file)
+load_server_icon myLogo.png
+
 set steam_webApiKey ""
 sv_licenseKey "${LICENSE_KEY}"
+
+#Security precautions
+set sv_requestParanoia 3
+sv_endpointprivacy true
+sv_authMinTrust 4
+set sv_kick_players_cnl 0
+set rateLimiter_stateBag_rate 100
+set rateLimiter_stateBag_burst 150
+
+increase_pool_size "AnimStore" 20480
+increase_pool_size "TxdStore" 20480
+
+set mumble_voice_prerelease 0
+
+# Seatbelt natives
+setr game_enableFlyThroughWindscreen true
+setr game_enablePlayerRagdollOnCollision true
+
+# Voice config
+setr voice_useNativeAudio true
+setr voice_useSendingRangeOnly true
+setr voice_defaultCycle "GRAVE"
+setr voice_defaultVolume 0.3
+setr voice_enableRadioAnim 1
+setr voice_syncData 1
+
+ensure mapmanager
+ensure chat
+ensure spawnmanager
+ensure sessionmanager
+ensure basic-gamemode
+ensure hardcap
+ensure rconlog
 EOF
 
 sudo -u "$FIVEM_USER" mkdir -p "$FIVEM_BASE/txData/default/"
