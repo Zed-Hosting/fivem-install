@@ -172,7 +172,24 @@ sudo -u "$FIVEM_USER" tee "$FIVEM_BASE/txData/default/config.json" > /dev/null <
 {
   "version": 2,
   "server": {
-    "dataPath": "/home/fivem/fx-server-data/"
+    "dataPath": "${FIVEM_DATA}",
+    "startupArgs": [
+      "+set",
+      "sv_enforceGameBuild",
+      "3258"
+    ]
+  },
+  "general": {
+    "serverName": "${HOSTNAME}"
+  },
+  "banlist": {
+    "enabled": false
+  },
+  "whitelist": {
+    "mode": "approvedLicense"
+  },
+  "gameFeatures": {
+    "hideAdminInMessages": true
   }
 }
 EOF
