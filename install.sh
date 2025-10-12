@@ -70,6 +70,7 @@ if [ -d "$FIVEM_DATA" ]; then
             echo -e "${RED}Removing directory '$FIVEM_DATA'...${RESTORE}"
             rm -rf "$FIVEM_DATA"
             echo -e "${GREEN}Directory removed.${RESTORE}"
+            sudo -u ${FIVEM_USER} pm2 delete fivem
             echo -e "${LBLUE}Creating directories...${RESTORE}"
             mkdir -p "$FIVEM_BASE" "$FIVEM_DATA" >>setup.log 2>>error.log
             chown -R "$FIVEM_USER:$FIVEM_USER" "$(dirname "$FIVEM_BASE")" >>setup.log 2>>error.log
