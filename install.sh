@@ -1,7 +1,7 @@
-#!/usr/bin/env bash
+  #!/usr/bin/env bash
 set -euo pipefail
 
-VERSION="3.1.6"
+VERSION="3.2.6"
 
 # --- Prompt with default helper ---
 prompt() {
@@ -193,7 +193,7 @@ cd "$FIVEM_BASE"
 sudo -u "$FIVEM_USER" wget -q https://zedhosting.gg/downloads/fivem_start.sh >>setup.log 2>>error.log
 sudo -u "$FIVEM_USER" wget -q https://zedhosting.gg/downloads/run.sh >>setup.log 2>>error.log
 echo ""
-echo -e "${LBLUE}🚀 Launching Server...${RESTORE}"
+echo -e "${GREEN}🚀 Launching Server...${RESTORE}"
 sudo -u "$FIVEM_USER" pm2 start fivem_start.sh --name fivem >>setup.log 2>>error.log
 sudo env PATH=$PATH:/usr/bin /usr/local/lib/node_modules/pm2/bin/pm2 startup systemd -u "$FIVEM_USER" --hp /home/fivem >>setup.log 2>>error.log
 sudo -u "$FIVEM_USER" pm2 save >>setup.log 2>>error.log
@@ -243,14 +243,15 @@ echo -e "${WHITE} sudo -u "$FIVEM_USER" nano ${FIVEM_DATA}/server.cfg  # to edit
 SERVER_IP=$(curl -s http://checkip.amazonaws.com || hostname -I | awk '{print $1}')
 FIVEM_URL="http://${SERVER_IP}:40120"
 echo ""
-echo -e "${WHITE}Generating URL...${RESTORE}"
+echo -e "${GREEN}Generating URL...${RESTORE}"
 sleep 10
 echo ""
 echo -e "${WHITE}🌐 Your FiveM server web interface may be available at:${RESTORE}"
 echo ""
 echo -e "${GREEN}👉 ${FIVEM_URL} ${RESTORE}"
 echo ""
-echo -e "${WHITE}Generating PIN...${RESTORE}"
+echo -e "${GREEN}Generating PIN...${RESTORE}"
+echo ""
 PIN_CODE=""
 sleep 10
 PIN_CODE=$(sudo -u fivem tail -n 500 /home/fivem/.pm2/logs/fivem-out.log   | strings   | grep "Use this PIN to add a new master account:"   | tail -n 1   | grep -oE '[0-9]{4}')
