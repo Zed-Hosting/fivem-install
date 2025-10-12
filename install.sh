@@ -229,7 +229,7 @@ EOF
 sudo -u "$FIVEM_USER" pm2 start fivem >>setup.log 2>>error.log
 sleep 10
 #sudo -u "$FIVEM_USER" pm2 restart fivem >>setup.log 2>>error.log
-#sudo -u "$FIVEM_USER" pm2 logs fivem --nostream --out --lines 30
+sudo -u "$FIVEM_USER" pm2 logs fivem --nostream --out --lines 30
 
 echo ""
 echo -e "✅ ${GREEN}Installation complete!${RESTORE}"
