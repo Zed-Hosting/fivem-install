@@ -260,13 +260,14 @@ echo ""
 #    fi
 #done
 PIN_CODE=""
+sleep 20
 while [ -z "$PIN_CODE" ]; do
     sleep 5
     PIN_CODE=$(sudo -u fivem tail -n 500 /home/fivem/.pm2/logs/fivem-out.log   | strings   | grep "Use this PIN to add a new master account:"   | tail -n 1   | grep -oE '[0-9]{4}')
     if [ -z "$PIN_CODE" ]; then
         echo "Generating PIN..."
     else
-        echo "Found PIN: $PIN_CODE"
+        #echo "Found PIN: $PIN_CODE"
     fi
 done
 
