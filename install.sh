@@ -64,7 +64,7 @@ id -u "$FIVEM_USER" &>/dev/null || adduser --disabled-password --gecos "" "$FIVE
 
 # Check if the directory exists
 if [ -d "$FIVEM_DATA" ]; then
-    read -p "Directory '$FIVEM_DATA' already exists. Do you want to remove it? (y/n): " choice
+    read -p "Installation found. Do you want to remove it? (y/n): " choice
     case "$choice" in
         y|Y )
             echo "Removing directory '$FIVEM_DATA'..."
