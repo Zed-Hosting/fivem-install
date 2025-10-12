@@ -26,8 +26,8 @@ LPURPLE='\033[01;35m'
 LCYAN='\033[01;36m'
 WHITE='\033[01;37m'
 
-WARN=$'\033[00;31m'
-RESET=$'\033[0m'
+WARN=$'\e[31m'
+RESET=$'\e[0m'
  
 echo -e "${YELLOW}=======================${RESTORE}">>setup.log 2>>error.log
 date >>setup.log 2>>error.log
@@ -44,7 +44,7 @@ prompt FIVEM_DATA "FXServer data directory (optional)" "/home/${FIVEM_USER}/fx-s
 
 LICENSE_KEY=""
 while [ -z "$LICENSE_KEY" ]; do
-    read -p "${WARN}Enter your FiveM license key (REQUIRED): ${RESET}" LICENSE_KEY
+    read -p "${WARN}Enter your FiveM license key (REQUIRED)${RESET}: " LICENSE_KEY
     if [ -z "$LICENSE_KEY" ]; then
         echo -e "${YELLOW}License key cannot be empty. Please try again.${RESTORE}"
     fi
