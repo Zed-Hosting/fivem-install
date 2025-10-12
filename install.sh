@@ -41,7 +41,7 @@ prompt FIVEM_DATA "FXServer data directory (optional)" "/home/${FIVEM_USER}/fx-s
 
 LICENSE_KEY=""
 while [ -z "$LICENSE_KEY" ]; do
-    read -p "$(echo -e ${RED}"Enter your FiveM license key (REQUIRED)"${RESTORE} " LICENSE_KEY
+    read -p "$(echo -e ${RED}"Enter your FiveM license key (REQUIRED): "${RESTORE})" LICENSE_KEY
     if [ -z "$LICENSE_KEY" ]; then
         echo -e "${YELLOW}License key cannot be empty. Please try again.${RESTORE}"
     fi
