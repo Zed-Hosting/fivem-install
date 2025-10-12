@@ -37,7 +37,7 @@ echo -e "${LCYAN}==== FiveM Auto-Install Script for Debian 12 / Ubuntu 22.04 ===
 echo -e "${LCYAN}Press ENTER to accept defaults or type to override${RESTORE}"
 
 # --- Collect user input ---
-echo -e "${LBLUE}"
+echo -e "${WHITE}"
 prompt FIVEM_USER "Enter system username to run FiveM (optional)" "fivem"
 prompt FIVEM_BASE "FXServer install directory (optional)" "/home/${FIVEM_USER}/fx-server"
 prompt FIVEM_DATA "FXServer data directory (optional)" "/home/${FIVEM_USER}/fx-server-data"
@@ -51,13 +51,14 @@ while [ -z "$LICENSE_KEY" ]; do
         echo -e "${YELLOW}License key cannot be empty. Please try again.${RESTORE}"
     fi
 done
-echo -e "${LBLUE}"
+echo -e "${WHITE}"
 prompt DB_USER "MariaDB username (optional)" "fivem"
 prompt DB_PASS "MariaDB password (optional)" "fivem123"
 prompt DB_NAME "MariaDB database name (optional)" "fivem_db"
 prompt HOSTNAME "Server hostname (optional) MAX 18 Characters" "Zed Hosting RP"
 prompt MAXCLIENTS "Max player count (optional)" "10"
 
+echo ""
 echo -e "${LBLUE}Installing dependencies...${RESTORE}"
 apt update >>setup.log 2>>error.log && apt install -y curl wget jq npm nano git git-lfs mariadb-server >>setup.log 2>>error.log
 
@@ -220,7 +221,13 @@ EOF
 sudo -u "$FIVEM_USER" pm2 start fivem >>setup.log 2>>error.log
 sleep 10
 #sudo -u "$FIVEM_USER" pm2 restart fivem >>setup.log 2>>error.log
-sudo -u "$FIVEM_USER" pm2 logs fivem --nostream --out --lines 30
+#sudo -u "$FIVEM_USER" pm2 logs fivem --nostream --out --lines 30
+
+PIN_CODE=sudo -u fivem tail -n 500 /home/fivem/.pm2/logs/fivem-out.log \
+  | strings \
+  | grep "Use this PIN to add a new master account:" \
+  | tail -n 1 \
+  | grep -oE '[0-9]{4}'
 
 echo ""
 echo -e "✅ ${GREEN}Installation complete!${RESTORE}"
@@ -239,7 +246,7 @@ echo -e "${WHITE}🌐 Your FiveM server web interface may be available at:${REST
 echo ""
 echo -e "${GREEN}👉 ${FIVEM_URL} ${RESTORE}"
 echo ""
-echo -e "${WHITE}🔢 The PIN is listed above${RESTORE}"
+echo -e "${WHITE}🔢 The PIN is: ${CYAN}${PIN_CODE}${RESTORE}"
 
 # Try to open it if GUI browser available
 if command -v xdg-open &>/dev/null; then
