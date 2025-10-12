@@ -92,6 +92,16 @@ set steam_webApiKey ""
 sv_licenseKey "${LICENSE_KEY}"
 EOF
 
+sudo -u "$FIVEM_USER" mkdir -p "$FIVEM_BASE/txData/default/"
+sudo -u "$FIVEM_USER" tee "$FIVEM_BASE/txData/default/config.json" > /dev/null <<EOF
+{
+  "version": 2,
+  "server": {
+    "dataPath": "/home/fivem/fx-server-data/"
+  }
+}
+EOF
+
 echo -e "${LBLUE}Configuring MariaDB...${RESTORE}"
 systemctl enable --now mariadb
 mysql -uroot <<MYSQL
@@ -113,16 +123,6 @@ echo -e "${LBLUE}Launching server with PM2...${RESTORE}"
 sudo -u "$FIVEM_USER" pm2 start fivem_start.sh --name fivem >>setup.log 2>>error.log
 sudo env PATH=$PATH:/usr/bin /usr/local/lib/node_modules/pm2/bin/pm2 startup systemd -u "$FIVEM_USER" --hp /home/fivem >>setup.log 2>>error.log
 sudo -u "$FIVEM_USER" pm2 save >>setup.log 2>>error.log
-
-sudo -u "$FIVEM_USER" mkdir -p "$FIVEM_BASE/txData/default/"
-sudo -u "$FIVEM_USER" tee "$FIVEM_BASE/txData/default/config.json" > /dev/null <<EOF
-{
-  "version": 2,
-  "server": {
-    "dataPath": "/home/fivem/fx-server-data/"
-  }
-}
-EOF
 
 sudo -u "$FIVEM_USER" pm2 restart fivem >>setup.log 2>>error.log
 sudo -u "$FIVEM_USER" pm2 logs fivem --nostream --out --lines 30
