@@ -67,9 +67,9 @@ if [ -d "$FIVEM_DATA" ]; then
     read -p "Installation found. Do you want to remove it? (y/n): " choice
     case "$choice" in
         y|Y )
-            echo -e "${RED}Removing directory '$FIVEM_DATA'...${RESTORE}"
+            echo -e "${LRED}Removing directory '$FIVEM_DATA'...${RESTORE}"
             rm -rf "$FIVEM_DATA"
-            echo -e "${GREEN}Directory removed.${RESTORE}"
+            echo -e "${LYELLOW}Directory removed.${RESTORE}"
             sudo -u ${FIVEM_USER} pm2 delete fivem
             echo -e "${LBLUE}Creating directories...${RESTORE}"
             mkdir -p "$FIVEM_BASE" "$FIVEM_DATA" >>setup.log 2>>error.log
