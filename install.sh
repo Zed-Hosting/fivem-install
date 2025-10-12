@@ -1,7 +1,7 @@
   #!/usr/bin/env bash
 set -euo pipefail
 
-VERSION="3.2.8"
+VERSION="3.2.9"
 
 # --- Prompt with default helper ---
 prompt() {
@@ -253,10 +253,8 @@ echo -e "${GREEN}Generating PIN...${RESTORE}"
 echo ""
 PIN_CODE=""
 while [ -z "$PIN_CODE" ]; do
+    sleep 5
     PIN_CODE=$(sudo -u fivem tail -n 500 /home/fivem/.pm2/logs/fivem-out.log   | strings   | grep "Use this PIN to add a new master account:"   | tail -n 1   | grep -oE '[0-9]{4}')
-    if [ -z "$PIN_CODE" ]; then
-        PIN_CODE=$(sudo -u fivem tail -n 500 /home/fivem/.pm2/logs/fivem-out.log   | strings   | grep "Use this PIN to add a new master account:"   | tail -n 1   | grep -oE '[0-9]{4}')
-    fi
 done
 #PIN_CODE=$(sudo -u fivem tail -n 500 /home/fivem/.pm2/logs/fivem-out.log   | strings   | grep "Use this PIN to add a new master account:"   | tail -n 1   | grep -oE '[0-9]{4}')
 echo -e "${WHITE}🔢 The PIN is: ${CYAN}${PIN_CODE}${RESTORE}"
