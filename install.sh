@@ -26,7 +26,7 @@ LPURPLE='\033[01;35m'
 LCYAN='\033[01;36m'
 WHITE='\033[01;37m'
 
-WARN=$'\e[31m'
+WARN=$'\033[01;31m'
 RESET=$'\e[0m'
  
 echo -e "${YELLOW}=======================${RESTORE}">>setup.log 2>>error.log
@@ -37,10 +37,12 @@ echo -e "${LCYAN}==== FiveM Auto-Install Script for Debian 12 / Ubuntu 22.04 ===
 echo -e "${LCYAN}Press ENTER to accept defaults or type to override${RESTORE}"
 
 # --- Collect user input ---
+echo -e "${WHITE}"
 prompt FIVEM_USER "Enter system username to run FiveM (optional)" "fivem"
 prompt FIVEM_BASE "FXServer install directory (optional)" "/home/${FIVEM_USER}/fx-server"
 prompt FIVEM_DATA "FXServer data directory (optional)" "/home/${FIVEM_USER}/fx-server-data"
 #prompt LICENSE_KEY "${RED}Enter your FiveM license key (REQUIRED)${RESTORE}" "changeme"
+echo -e "${RESTORE}"
 
 LICENSE_KEY=""
 while [ -z "$LICENSE_KEY" ]; do
