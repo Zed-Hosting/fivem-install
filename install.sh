@@ -37,12 +37,11 @@ echo -e "${LCYAN}==== FiveM Auto-Install Script for Debian 12 / Ubuntu 22.04 ===
 echo -e "${LCYAN}Press ENTER to accept defaults or type to override${RESTORE}"
 
 # --- Collect user input ---
-echo -e "${WHITE}"
+echo -e "${LBLUE}"
 prompt FIVEM_USER "Enter system username to run FiveM (optional)" "fivem"
 prompt FIVEM_BASE "FXServer install directory (optional)" "/home/${FIVEM_USER}/fx-server"
 prompt FIVEM_DATA "FXServer data directory (optional)" "/home/${FIVEM_USER}/fx-server-data"
 #prompt LICENSE_KEY "${RED}Enter your FiveM license key (REQUIRED)${RESTORE}" "changeme"
-echo -e "${RESTORE}"
 
 echo -e "${LRED}"
 LICENSE_KEY=""
@@ -52,7 +51,7 @@ while [ -z "$LICENSE_KEY" ]; do
         echo -e "${YELLOW}License key cannot be empty. Please try again.${RESTORE}"
     fi
 done
-
+echo -e "${LBLUE}"
 prompt DB_USER "MariaDB username (optional)" "fivem"
 prompt DB_PASS "MariaDB password (optional)" "fivem123"
 prompt DB_NAME "MariaDB database name (optional)" "fivem_db"
