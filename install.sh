@@ -61,7 +61,7 @@ sudo -u "$FIVEM_USER" bash fivem_install.sh >>setup.log 2>>error.log
 
 echo -e "${LBLUE}Cloning cfx-server-data...${RESTORE}"
 cd "$FIVEM_DATA"
-sudo -u "$FIVEM_USER" git clone https://github.com/citizenfx/cfx-server-data .
+sudo -u "$FIVEM_USER" git clone --quiet https://github.com/citizenfx/cfx-server-data . 
 
 echo -e "${LBLUE}Creating server.cfg...${RESTORE}"
 sudo -u "$FIVEM_USER" tee "$FIVEM_DATA/server.cfg" > /dev/null <<EOF
@@ -103,7 +103,7 @@ sudo -u "$FIVEM_USER" tee "$FIVEM_BASE/txData/default/config.json" > /dev/null <
 EOF
 
 echo -e "${LBLUE}Configuring MariaDB...${RESTORE}"
-systemctl enable --now mariadb
+systemctl enable --now mariadb >>setup.log 2>>error.log
 mysql -uroot <<MYSQL
 CREATE USER IF NOT EXISTS '${DB_USER}'@'127.0.0.1' IDENTIFIED BY '${DB_PASS}';
 CREATE DATABASE IF NOT EXISTS ${DB_NAME};
@@ -124,7 +124,7 @@ sudo -u "$FIVEM_USER" pm2 start fivem_start.sh --name fivem >>setup.log 2>>error
 sudo env PATH=$PATH:/usr/bin /usr/local/lib/node_modules/pm2/bin/pm2 startup systemd -u "$FIVEM_USER" --hp /home/fivem >>setup.log 2>>error.log
 sudo -u "$FIVEM_USER" pm2 save >>setup.log 2>>error.log
 
-sudo -u "$FIVEM_USER" pm2 restart fivem >>setup.log 2>>error.log
+#sudo -u "$FIVEM_USER" pm2 restart fivem >>setup.log 2>>error.log
 sudo -u "$FIVEM_USER" pm2 logs fivem --nostream --out --lines 30
 
 echo ""
