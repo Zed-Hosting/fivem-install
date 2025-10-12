@@ -1,7 +1,7 @@
   #!/usr/bin/env bash
 set -euo pipefail
 
-VERSION="3.2.12"
+VERSION="3.2.13"
 
 # --- Prompt with default helper ---
 prompt() {
@@ -251,14 +251,25 @@ echo -e "${GREEN}👉 ${FIVEM_URL} ${RESTORE}"
 echo ""
 echo -e "${GREEN}Generating PIN...${RESTORE}"
 echo ""
+#PIN_CODE=""
+#while [ -z "$PIN_CODE" ]; do
+#    sleep 35
+#    PIN_CODE=$(sudo -u fivem tail -n 500 /home/fivem/.pm2/logs/fivem-out.log   | strings   | grep "Use this PIN to add a new master account:"   | tail -n 1   | grep -oE '[0-9]{4}')
+#    if [ -z "$PIN_CODE" ]; then
+#        echo -e "${GREEN}Generating PIN...${RESTORE}"
+#    fi
+#done
 PIN_CODE=""
 while [ -z "$PIN_CODE" ]; do
-    sleep 35
-    PIN_CODE=$(sudo -u fivem tail -n 500 /home/fivem/.pm2/logs/fivem-out.log   | strings   | grep "Use this PIN to add a new master account:"   | tail -n 1   | grep -oE '[0-9]{4}')
+    sleep 5
+    PIN_CODE=$(sudo -u fivem grep -oE '[0-9]{4}' /home/fivem/.pm2/logs/fivem-out.log | tail -n1)
     if [ -z "$PIN_CODE" ]; then
-        echo -e "${GREEN}Generating PIN...${RESTORE}"
+        echo "Generating PIN..."
+    else
+        echo "Found PIN: $PIN_CODE"
     fi
 done
+
 #PIN_CODE=$(sudo -u fivem tail -n 500 /home/fivem/.pm2/logs/fivem-out.log   | strings   | grep "Use this PIN to add a new master account:"   | tail -n 1   | grep -oE '[0-9]{4}')
 echo -e "${WHITE}🔢 The PIN is: ${CYAN}${PIN_CODE}${RESTORE}"
 echo ""
