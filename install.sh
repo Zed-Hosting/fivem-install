@@ -67,9 +67,12 @@ if [ -d "$FIVEM_DATA" ]; then
     read -p "Installation found. Do you want to remove it? (y/n): " choice
     case "$choice" in
         y|Y )
-            echo "Removing directory '$FIVEM_DATA'..."
+            echo -e "${RED}Removing directory '$FIVEM_DATA'...${RESTORE}"
             rm -rf "$FIVEM_DATA"
-            echo "Directory removed."
+            echo -e "${GREEN}Directory removed.${RESTORE}"
+            echo -e "${LBLUE}Creating directories...${RESTORE}"
+            mkdir -p "$FIVEM_BASE" "$FIVEM_DATA" >>setup.log 2>>error.log
+            chown -R "$FIVEM_USER:$FIVEM_USER" "$(dirname "$FIVEM_BASE")" >>setup.log 2>>error.log
             ;;
         n|N )
             echo "Operation cancelled. Directory '$FIVEM_DATA' will not be removed."
@@ -82,9 +85,6 @@ if [ -d "$FIVEM_DATA" ]; then
     esac
 else
     echo -e "${WHITE}Directory '$FIVEM_DATA' does not exist.${RESTORE}"
-    echo -e "${LBLUE}Creating directories...${RESTORE}"
-    mkdir -p "$FIVEM_BASE" "$FIVEM_DATA" >>setup.log 2>>error.log
-    chown -R "$FIVEM_USER:$FIVEM_USER" "$(dirname "$FIVEM_BASE")" >>setup.log 2>>error.log
 fi
 
 echo -e "${LBLUE}Installing FXServer...${RESTORE}"
