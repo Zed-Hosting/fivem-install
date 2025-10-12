@@ -44,7 +44,7 @@ prompt FIVEM_DATA "FXServer data directory (optional)" "/home/${FIVEM_USER}/fx-s
 
 LICENSE_KEY=""
 while [ -z "$LICENSE_KEY" ]; do
-    read -p "${WARN}Enter your FiveM license key (REQUIRED)${RESET}: " LICENSE_KEY
+    read -p "${RED}Enter your FiveM license key (REQUIRED)${RESET}: " LICENSE_KEY
     if [ -z "$LICENSE_KEY" ]; then
         echo -e "${YELLOW}License key cannot be empty. Please try again.${RESTORE}"
     fi
@@ -62,9 +62,30 @@ apt update >>setup.log 2>>error.log && apt install -y curl wget jq npm nano git 
 echo -e "${LBLUE}Creating system user '$FIVEM_USER'...${RESTORE}"
 id -u "$FIVEM_USER" &>/dev/null || adduser --disabled-password --gecos "" "$FIVEM_USER" >>setup.log 2>>error.log
 
-echo -e "${LBLUE}Creating directories...${RESTORE}"
-mkdir -p "$FIVEM_BASE" "$FIVEM_DATA" >>setup.log 2>>error.log
-chown -R "$FIVEM_USER:$FIVEM_USER" "$(dirname "$FIVEM_BASE")" >>setup.log 2>>error.log
+# Check if the directory exists
+if [ -d "$FIVEM_DATA" ]; then
+    read -p "Directory '$FIVEM_DATA' already exists. Do you want to remove it? (y/n): " choice
+    case "$choice" in
+        y|Y )
+            echo "Removing directory '$FIVEM_DATA'..."
+            rm -rf "$FIVEM_DATA"
+            echo "Directory removed."
+            ;;
+        n|N )
+            echo "Operation cancelled. Directory '$FIVEM_DATA' will not be removed."
+            exit 0 # Exit successfully after cancellation
+            ;;
+        * )
+            echo "Invalid input. Operation cancelled."
+            exit 1 # Exit with an error code for invalid input
+            ;;
+    esac
+else
+    echo -e "${WHITE}Directory '$FIVEM_DATA' does not exist.${RESTORE}"
+    echo -e "${LBLUE}Creating directories...${RESTORE}"
+    mkdir -p "$FIVEM_BASE" "$FIVEM_DATA" >>setup.log 2>>error.log
+    chown -R "$FIVEM_USER:$FIVEM_USER" "$(dirname "$FIVEM_BASE")" >>setup.log 2>>error.log
+fi
 
 echo -e "${LBLUE}Installing FXServer...${RESTORE}"
 cd "$FIVEM_BASE"
