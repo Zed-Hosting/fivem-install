@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-VERSION="3.1.4"
+VERSION="3.1.5"
 
 # --- Prompt with default helper ---
 prompt() {
@@ -248,6 +248,7 @@ echo -e "${WHITE}🌐 Your FiveM server web interface may be available at:${REST
 echo ""
 echo -e "${GREEN}👉 ${FIVEM_URL} ${RESTORE}"
 echo ""
+PIN_CODE=""
 PIN_CODE=$(sudo -u fivem tail -n 500 /home/fivem/.pm2/logs/fivem-out.log \
   | strings \
   | grep "Use this PIN to add a new master account:" \
