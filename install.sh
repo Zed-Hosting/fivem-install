@@ -1,7 +1,7 @@
   #!/usr/bin/env bash
 set -euo pipefail
 
-VERSION="3.2.14"
+VERSION="3.2.15"
 
 # --- Prompt with default helper ---
 prompt() {
