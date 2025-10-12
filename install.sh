@@ -55,7 +55,7 @@ echo -e "${LBLUE}"
 prompt DB_USER "MariaDB username (optional)" "fivem"
 prompt DB_PASS "MariaDB password (optional)" "fivem123"
 prompt DB_NAME "MariaDB database name (optional)" "fivem_db"
-prompt HOSTNAME "Server hostname (optional)" "Zed Hosting FXServer"
+prompt HOSTNAME "Server hostname (optional) MAX 18 Characters" "Zed Hosting RP"
 prompt MAXCLIENTS "Max player count (optional)" "10"
 
 echo -e "${LBLUE}Installing dependencies...${RESTORE}"
